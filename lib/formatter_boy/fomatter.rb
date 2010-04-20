@@ -5,6 +5,21 @@ class Formatter
   end
 
   self.formatters = {}
+  self.definition_file_paths = %w(lib/formatters)
+
+
+  def self.find_definitions #:nodoc:
+    definition_file_paths.each do |path|
+      require("#{path}.rb") if File.exists?("#{path}.rb")
+
+      if File.directory? path
+        Dir[File.join(path, '*.rb')].each do |file|
+          require file
+        end
+      end
+    end
+  end
+  
 
   def self.define(name,options={},&block)
     instance = Formatter.new name,options,&block
