@@ -1,13 +1,38 @@
-ActsAsFormatter
+Formatter Body
 ===============
-
-Introduction goes here.
-
+Manage your text format code in one place.
+Integration with your ActiveRecord model.
+Support extention.
 
 Example
 =======
+define formatter in lib/formatters or lib/formatters.rb
+like this:
+Formatter.define :round do |input,options|
+  input.round
+end
+Formatter.define :wrapper do |input,options|
+  "#{options[:prefix]} #{input}#{options[:suffix]}"
+end
 
-Example goes here.
+Use it like this.
+class Book < ActiveRecord::Base
+  attr_accessor :name, :price
+  round_format :price
+  wrapper_format :name, :prefix => "I'm", :suffix => "."
+end
 
+Book.new.round_formatted_price
+Bookanew.wrapper_formatted_name
 
-Copyright (c) 2010 [name of plugin creator], released under the MIT license
+Also support extention.
+#define
+Formatter.define :prefix,:parent => :wrapper,:options => {:suffix => "."}             
+
+TODO
+====
+
+* customise method prefix.
+* expose formatter method, we can use it anywhere,
+
+Copyright (c) 2010 [allenwei], released under the MIT license
